@@ -7,6 +7,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+builder.Services.AddCors(options => options.AddPolicy(name: "SuperHero",
+                         policy => 
+                         {
+                             policy.WithOrigins("http://localhost:4200").AllowAnyMethod()
+                                   .AllowAnyHeader();        
+                         }));
 
 var app = builder.Build();
 
@@ -16,6 +22,8 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
     app.MapScalarApiReference("v1");
 }
+
+app.UseCors("SuperHero");
 
 app.UseHttpsRedirection();
 
